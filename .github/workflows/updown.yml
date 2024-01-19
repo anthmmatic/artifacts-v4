@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "This is a file" > file.txt
+    - uses: actions/upload-artifact@v4
+      with:
+        name: my-artifact
+        path: file.txt
+  download:
+    needs: upload
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: my-artifact
+        github-token: ${{ secrets.PAT }}
+    - run: ls -R my-artifact
